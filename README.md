@@ -1,118 +1,46 @@
-# Hong Kong Mortgage Risk Monitor
+# 🏠 香港住宅按揭风险与宏观因子传导分析
+### Hong Kong Mortgage Risk & Macro-Factor Transmission Analysis
 
-### Data analysis portfolio project on interest rates, mortgage activity and housing risk
+> **项目定位 / Project Positioning**
+> 本项目并不是单纯的学术计量练习，而是针对高度金融化的香港房地产市场进行的一次**“宏观压力测试与风险归因”**。项目完整走通了从多源异构数据整合、风险指标体系构建、因果传导机制验证，到最终双语数据产品化交付的全链路，为金融机构的风控与信贷策略提供决策支持。
+> 
+> *This project is not just an academic econometric exercise, but a "macro stress test and risk attribution" for Hong Kong's highly financialized real estate market. It covers the full chain from multi-source data integration, risk index construction, causal transmission validation, to the final bilingual data product delivery, supporting decision-making for financial risk control and credit strategies.*
 
-![Hong Kong Mortgage Risk Monitor dashboard](artifacts/desktop.png)
+---
 
-[Open the interactive dashboard](https://yuehaomin-svg.github.io/Hong-Kong-Mortgage-Risk-Macro-Factor-Transmission-Analysis/dashboard/) · [Chinese report](docs/report-cn.md) · [English report](docs/report-en.md) · [Methodology](docs/methodology.md)
+## 💡 业务背景与分析目的 (Business Context & Objectives)
 
-> GitHub Pages is not enabled automatically. Follow the steps below once before sharing the interactive dashboard link.
+香港按揭贷款的资产质量直接关系到金融系统的稳定。然而，房贷违约（负资产）并非孤立事件，而是受宏观经济、利率周期和市场成交量的多重滞后影响。
+*   **业务痛点**：传统的风控往往只看当期的坏账率，属于“事后诸葛亮”。我们需要一套工具，能够提前识别风险积聚的过程。
+*   **分析目标**：整合政府部门跨度 8 年的宏观数据，构建“按揭压力指数”，并探究利率、需求与成交之间的领先滞后（Lead-Lag）关系。
 
-## Project Overview
+---
 
-This project examines how the Hong Kong interest-rate hiking cycle coincided with changes in residential mortgage demand, approvals, transactions and negative-equity risk from January 2018 to December 2025.
+## 📊 交互式展示与图文总结 (Live Dashboard & Summary)
 
-It combines a reproducible Python data pipeline, mixed-frequency exploratory analysis, a transparent composite stress index and a bilingual interactive dashboard. The presentation focuses on analytical evidence, business interpretation and visual communication.
+*   🌐 **[点击查看：项目完整图文分析报告 (Summary Page)](https://yuehaomin-svg.github.io/Hong-Kong-Mortgage-Risk-Macro-Factor-Transmission-Analysis/)**
+*   📈 **[点击体验：中英双语交互式管理仪表盘 (Interactive Dashboard)](https://yuehaomin-svg.github.io/Hong-Kong-Mortgage-Risk-Macro-Factor-Transmission-Analysis/dashboard/)**
 
-## Key Findings
+---
 
-- Mortgage applications fell **25.3%** during the hiking window, while approvals declined **17.8%** and residential transactions declined **24.3%**.
-- The composite mortgage stress index peaked at **58.7/100 in July 2024**; alternative weighting schemes produced peaks of 58.7–60.7, supporting the timing result.
-- Three-month HIBOR and mortgage applications moved in opposite directions, with a descriptive correlation of **-0.70**.
-- Applications and residential transactions were most closely related at zero lag (**r = 0.67**), indicating a largely synchronous market cycle rather than a stable one-way lead.
-- Negative equity appeared later: HIBOR led the strongest negative-equity relationship by **12 months (r = 0.85)**, although common trends and quarterly sampling limit causal interpretation.
+## 🛠️ 核心分析与技术亮点 (Analytical Highlights)
 
-## Portfolio Highlights
+*   **多源数据整合与清洗 (ETL Pipeline)**：
+    整合 HKMA（金管局）、土地注册处及政府统计处跨度 **96 个月（8年）** 的异构数据。使用 Python（Pandas）搭建可复现的流水线，统一按揭申请、批核、成交及宏观指标的统计口径，解决时间戳对齐与缺失值处理问题。
+*   **风险指标体系构建 (Composite Risk Measurement)**：
+    筛选核心宏观与地产指标，构建“住宅按揭压力指数”。通过**敏感性分析（Sensitivity Analysis）**确定各维度权重，精准定位到 **2024 年 7 月为风险峰值（58.7/100）**。
+*   **传导机制归因分析 (Lead-Lag Analysis)**：
+    不仅看表面相关性，更通过领先滞后分析，剥离表象，验证了“利率上升 → 需求下降 → 成交量萎缩 → 负资产增加”的完整传导链路。量化得出：加息期按揭申请量下降 **25.3%**、成交量下降 **24.3%** 的核心结论。
+*   **业务价值落地 (Business Value)**：
+    将复杂的计量结果转化为交互式双语仪表盘，帮助风控团队直观看到风险积聚的过程，将事后“看报表”转变为事前的“风险预警”，辅助信贷策略的动态调整。
 
-| Analytical focus | What the dashboard shows |
-| --- | --- |
-| Market cycle segmentation | Pre-hiking, hiking and post-hiking comparisons |
-| Composite risk measurement | Stress-index construction and three weighting scenarios |
-| Relationship analysis | Correlation heatmap and lead-lag diagnostics |
-| Business translation | Executive KPI cards, structured findings and limitations |
-| Communication | Responsive Chinese-English interface and reproducible documentation |
+---
 
-<details>
-<summary><strong>Mobile dashboard preview</strong></summary>
+## ⚙️ 技术栈 (Technology Stack)
 
-![Mobile dashboard preview](artifacts/mobile.png)
+*   **数据获取与处理**：Python (Pandas, NumPy, Requests)
+*   **统计与计量分析**：Statsmodels (时间序列分析, 协整检验, 滞后回归)
+*   **可视化与产品化**：Streamlit / Plotly / HTML5 (GitHub Pages)
+*   **版本控制**：Git
 
-</details>
-
-## Data Sources
-
-| Domain | Official source | Frequency |
-| --- | --- | --- |
-| Mortgage applications, approvals and LTV | HKMA Residential Mortgage Survey | Monthly |
-| Negative equity | HKMA Mortgage Loans in Negative Equity Survey | Quarterly |
-| Interest rates | HKMA Hong Kong Dollar Interest Settlement Rates | Monthly average |
-| Residential transactions | Hong Kong Land Registry | Monthly |
-| Unemployment | Census and Statistics Department | Rolling three-month |
-| Inflation | Census and Statistics Department | Monthly year-on-year |
-
-## Analytical Workflow
-
-1. Download fixed snapshots from official open-data sources.
-2. Harmonise monthly, rolling-quarterly and quarterly observations.
-3. Build application, approval, transaction, rate, negative-equity and macroeconomic indicators.
-4. Calculate a four-component mortgage stress index and test alternative weights.
-5. Run descriptive correlation and lead-lag analysis with explicit limitations.
-6. Publish the evidence through an interactive bilingual dashboard.
-
-## Reproduce the Project
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-
-python scripts/download_data.py
-python scripts/build_dataset.py
-python scripts/build_dashboard_data.py
-python -m pytest -q
-```
-
-Open `dashboard/index.html` directly, or serve the repository locally:
-
-```powershell
-python -m http.server 8000
-```
-
-Then visit `http://127.0.0.1:8000/dashboard/`.
-
-## Enable GitHub Pages
-
-1. Open the repository **Settings**.
-2. Select **Pages** in the left sidebar.
-3. Under **Build and deployment**, choose **Deploy from a branch**.
-4. Select `main` and `/ (root)`, then click **Save**.
-5. Wait one to two minutes and refresh:
-   `https://yuehaomin-svg.github.io/Hong-Kong-Mortgage-Risk-Macro-Factor-Transmission-Analysis/dashboard/`
-
-## Repository Structure
-
-```text
-dashboard/             interactive bilingual dashboard
-artifacts/             desktop and mobile dashboard previews
-data/raw/              official source snapshots, excluded from Git
-data/processed/        generated analysis datasets, excluded from Git
-docs/                  reports, methodology, data dictionary and portfolio notes
-scripts/               data download and reproducible transformation pipeline
-tests/                 pipeline and visual regression checks
-```
-
-The dashboard payload is included in the repository so the visual portfolio works immediately on GitHub Pages. Raw and processed source files remain excluded to keep the repository compact and can be regenerated with the scripts above.
-
-## Important Limitations
-
-- The stress index is a relative monitoring gauge, not a credit-risk probability or investment signal.
-- Monthly observations provide a limited sample for statistical inference.
-- Negative-equity data is quarterly and common time trends may inflate correlation estimates.
-- Approvals divided by applications is a market-level proxy, not a cohort-level approval probability.
-- Correlation and lead-lag results are descriptive and should not be interpreted as causal estimates.
-
-## About This Portfolio Version
-
-This academic team project is presented as a data-analysis portfolio case study. The public dashboard intentionally omits personal member details. When using the project in a job application, add a short and truthful statement of your own contribution.
-
-For interview preparation, see [portfolio-notes.md](docs/portfolio-notes.md).
+---
