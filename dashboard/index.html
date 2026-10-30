@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Data analytics portfolio project on Hong Kong housing mortgage risk during the interest-rate hiking cycle.">
+  <title>香港住宅按揭风险监测 | Hong Kong Mortgage Risk</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="回到顶部">
+      <span class="brand-mark">31</span>
+      <span>HK Mortgage Risk</span>
+    </a>
+    <nav class="site-nav" aria-label="项目导航">
+      <a href="#overview" data-zh="概览" data-en="Overview">概览</a>
+      <a href="#evidence" data-zh="证据" data-en="Evidence">证据</a>
+      <a href="#method" data-zh="方法" data-en="Method">方法</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-command" id="downloadCsv" type="button" title="下载分析数据">
+        <span aria-hidden="true">↓</span>
+        <span data-zh="数据" data-en="Data">数据</span>
+      </button>
+      <button class="language-toggle" id="languageToggle" type="button">EN</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">HONG KONG · HOUSING MARKET · PORTFOLIO CASE</p>
+        <h1 data-zh="香港住宅按揭风险监测" data-en="Hong Kong Housing Mortgage Risk Monitor">香港住宅按揭风险监测</h1>
+        <p class="hero-lede" data-zh="用 2018–2025 年真实月度数据，拆解加息周期如何传导至按揭申请、成交、负资产与家庭杠杆。" data-en="Using real monthly data from 2018–2025 to examine how the hiking cycle transmitted into mortgage demand, transactions, negative equity and household leverage.">用 2018–2025 年真实月度数据，拆解加息周期如何传导至按揭申请、成交、负资产与家庭杠杆。</p>
+        <div class="hero-actions">
+          <a class="primary-action" href="#overview" data-zh="查看核心结论" data-en="View key findings">查看核心结论</a>
+          <a class="secondary-action" href="#method" data-zh="查看方法与复现" data-en="Method & reproduction">查看方法与复现</a>
+        </div>
+        <div class="source-strip">
+          <span>HKMA</span><span>LAND REGISTRY</span><span>C&SD</span><span>96 MONTHS</span>
+        </div>
+      </div>
+      <div class="hero-visual" aria-label="压力指数概览图">
+        <div class="visual-label">
+          <span data-zh="月度压力指数" data-en="Monthly stress index">月度压力指数</span>
+          <strong id="heroIndexValue">50.0</strong>
+        </div>
+        <svg id="heroChart" viewBox="0 0 760 360" role="img"></svg>
+        <div class="visual-caption">
+          <span><i class="legend-dot rate"></i><span data-zh="利率冲击" data-en="Rate shock">利率冲击</span></span>
+          <span><i class="legend-dot equity"></i><span data-zh="负资产风险" data-en="Negative equity">负资产风险</span></span>
+          <span><i class="legend-dot market"></i><span data-zh="市场收缩" data-en="Market contraction">市场收缩</span></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="kpi-band" id="overview">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">01 / EXECUTIVE VIEW</p>
+          <h2 data-zh="核心结论" data-en="Key findings">核心结论</h2>
+        </div>
+        <p data-zh="指数是透明的相对风险标尺，不是违约预测。" data-en="The index is a transparent relative-risk gauge, not a default forecast.">指数是透明的相对风险标尺，不是违约预测。</p>
+      </div>
+      <div class="kpi-grid" id="kpiGrid"></div>
+      <div class="finding-grid">
+        <article class="finding finding-primary">
+          <span class="finding-number">01</span>
+          <h3 data-zh="利率上升与按揭活动收缩同步出现" data-en="Higher rates coincide with weaker mortgage activity">利率上升与按揭活动收缩同步出现</h3>
+          <p id="findingRate"></p>
+        </article>
+        <article class="finding">
+          <span class="finding-number">02</span>
+          <h3 data-zh="成交量与按揭活动近乎同步，未显示稳定单向领先" data-en="Transactions and mortgage activity move together">成交量与按揭活动近乎同步，未显示稳定单向领先</h3>
+          <p id="findingLag"></p>
+        </article>
+        <article class="finding">
+          <span class="finding-number">03</span>
+          <h3 data-zh="负资产是滞后风险，而非即时市场流量" data-en="Negative equity behaves as a lagged risk">负资产是滞后风险，而非即时市场流量</h3>
+          <p id="findingEquity"></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="cycle-section">
+      <div class="cycle-intro">
+        <p class="section-kicker">02 / CYCLE DESIGN</p>
+        <h2 data-zh="三个市场阶段" data-en="Three market regimes">三个市场阶段</h2>
+        <p data-zh="以 3 个月 HIBOR 周期为界：2022 年 3 月进入持续上行，2023 年 8 月达到高位后转入高位平台。" data-en="The 3-month HIBOR cycle defines the windows: sustained acceleration starts in March 2022 and reaches a high-rate plateau after August 2023.">以 3 个月 HIBOR 周期为界：2022 年 3 月进入持续上行，2023 年 8 月达到高位后转入高位平台。</p>
+      </div>
+      <div class="cycle-track" id="cycleTrack"></div>
+    </section>
+
+    <section class="evidence-section" id="evidence">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">03 / INTERACTIVE EVIDENCE</p>
+          <h2 data-zh="交互式证据" data-en="Interactive evidence">交互式证据</h2>
+        </div>
+        <div class="segmented-control" id="trendMode" aria-label="趋势图指标">
+          <button type="button" data-mode="applications" class="active" data-zh="申请" data-en="Applications">申请</button>
+          <button type="button" data-mode="approvals" data-zh="批核" data-en="Approvals">批核</button>
+          <button type="button" data-mode="transactions" data-zh="成交" data-en="Transactions">成交</button>
+          <button type="button" data-mode="equity" data-zh="负资产" data-en="Negative equity">负资产</button>
+        </div>
+      </div>
+
+      <article class="chart-panel large">
+        <div class="panel-heading">
+          <div>
+            <span class="panel-index">3.1</span>
+            <h3 data-zh="利率与市场活动的多轴变化" data-en="Rates and market activity">利率与市场活动的多轴变化</h3>
+          </div>
+          <p id="trendSubtitle"></p>
+        </div>
+        <div class="chart-wrap">
+          <svg id="trendChart" viewBox="0 0 1120 440" role="img"></svg>
+          <div class="chart-tooltip" id="trendTooltip"></div>
+        </div>
+      </article>
+
+      <div class="two-column">
+        <article class="chart-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="panel-index">3.2</span>
+              <h3 data-zh="压力指数与权重敏感性" data-en="Stress index sensitivity">压力指数与权重敏感性</h3>
+            </div>
+            <div class="segmented-control compact" id="stressMode">
+              <button type="button" data-mode="equal" class="active" data-zh="等权" data-en="Equal">等权</button>
+              <button type="button" data-mode="rate_dominant" data-zh="利率主导" data-en="Rate-led">利率主导</button>
+              <button type="button" data-mode="borrower_dominant" data-zh="借款人主导" data-en="Borrower-led">借款人主导</button>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <svg id="stressChart" viewBox="0 0 760 390" role="img"></svg>
+            <div class="chart-tooltip" id="stressTooltip"></div>
+          </div>
+          <p class="chart-note" data-zh="指数 = 50 + 10 × 加权标准分，并限制在 0–100。曲线接近表示结论对权重设定不敏感。" data-en="Index = 50 + 10 × weighted z-score, bounded to 0–100. Similar paths indicate limited weight sensitivity.">指数 = 50 + 10 × 加权标准分，并限制在 0–100。曲线接近表示结论对权重设定不敏感。</p>
+        </article>
+
+        <article class="chart-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="panel-index">3.3</span>
+              <h3 data-zh="加息期前后的结构变化" data-en="Pre/post cycle comparison">加息期前后的结构变化</h3>
+            </div>
+          </div>
+          <div class="period-table" id="periodTable"></div>
+        </article>
+      </div>
+
+      <div class="two-column">
+        <article class="chart-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="panel-index">3.4</span>
+              <h3 data-zh="利率—批核—负资产关系" data-en="Rate, approval and negative equity">利率—批核—负资产关系</h3>
+            </div>
+            <p data-zh="气泡大小代表负资产宗数" data-en="Bubble size = negative-equity cases">气泡大小代表负资产宗数</p>
+          </div>
+          <div class="chart-wrap">
+            <svg id="bubbleChart" viewBox="0 0 760 430" role="img"></svg>
+            <div class="chart-tooltip" id="bubbleTooltip"></div>
+          </div>
+        </article>
+
+        <article class="chart-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="panel-index">3.5</span>
+              <h3 data-zh="领先滞后关系" data-en="Lead-lag relationships">领先滞后关系</h3>
+            </div>
+            <div class="segmented-control compact" id="lagMode">
+              <button type="button" data-mode="hibor_3m_pct->new_applications_received" class="active">HIBOR → 申请</button>
+              <button type="button" data-mode="hibor_3m_pct->residential_transactions">HIBOR → 成交</button>
+              <button type="button" data-mode="new_applications_received->residential_transactions">申请 → 成交</button>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <svg id="lagChart" viewBox="0 0 760 390" role="img"></svg>
+            <div class="chart-tooltip" id="lagTooltip"></div>
+          </div>
+          <p class="chart-note" data-zh="正值滞后表示前一个变量领先；相关性是探索性证据，不代表因果。" data-en="Positive lag means the first variable leads. Correlation is exploratory evidence, not causality.">正值滞后表示前一个变量领先；相关性是探索性证据，不代表因果。</p>
+        </article>
+      </div>
+
+      <article class="chart-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="panel-index">3.6</span>
+            <h3 data-zh="月度相关性热力图" data-en="Monthly correlation heatmap">月度相关性热力图</h3>
+          </div>
+          <p data-zh="Pearson 相关；负资产使用季度最新值延续到月度" data-en="Pearson correlations; quarterly negative-equity values are carried forward">Pearson 相关；负资产使用季度最新值延续到月度</p>
+        </div>
+        <div class="chart-wrap heatmap-wrap">
+          <svg id="heatmapChart" viewBox="0 0 1120 570" role="img"></svg>
+          <div class="chart-tooltip" id="heatmapTooltip"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="method-section" id="method">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">04 / METHOD & REPRODUCIBILITY</p>
+          <h2 data-zh="从原始数据到结论" data-en="From source data to findings">从原始数据到结论</h2>
+        </div>
+        <a class="text-link" href="https://github.com/yuehaomin-svg/Hong-Kong-Mortgage-Risk-Macro-Factor-Transmission-Analysis" target="_blank" rel="noreferrer">README ↗</a>
+      </div>
+      <div class="method-grid">
+        <article>
+          <span>DATA</span>
+          <h3 data-zh="真实来源与固定样本" data-en="Authoritative fixed sample">真实来源与固定样本</h3>
+          <p data-zh="HKMA 按揭调查、负资产调查与 HIBOR；土地注册处住宅买卖协议；政府统计处失业率与综合 CPI。" data-en="HKMA mortgage and negative-equity surveys, HIBOR, Land Registry residential ASPs, and Census & Statistics Department unemployment and CPI.">HKMA 按揭调查、负资产调查与 HIBOR；土地注册处住宅买卖协议；政府统计处失业率与综合 CPI。</p>
+        </article>
+        <article>
+          <span>MODEL</span>
+          <h3 data-zh="透明、可解释的指数" data-en="Transparent composite index">透明、可解释的指数</h3>
+          <p data-zh="四个风险分量：利率、负资产、成交收缩、失业率。均值/标准差标准化后加权，并提供三套权重敏感性测试。" data-en="Four components: rates, negative equity, transaction contraction and unemployment. Mean/SD standardisation with three weighting schemes.">四个风险分量：利率、负资产、成交收缩、失业率。均值/标准差标准化后加权，并提供三套权重敏感性测试。</p>
+        </article>
+        <article>
+          <span>PIPELINE</span>
+          <h3 data-zh="四条命令完整复现" data-en="Four-command reproduction">四条命令完整复现</h3>
+          <p><code>download_data.py</code> → <code>build_dataset.py</code> → <code>build_dashboard_data.py</code> → <code>pytest</code></p>
+        </article>
+        <article>
+          <span>LIMITS</span>
+          <h3 data-zh="避免过度解读" data-en="Guarding against overclaiming">避免过度解读</h3>
+          <p data-zh="月度样本较小；负资产仅按季度公布；批核/申请并非同一申请人的队列通过率；趋势变量相关可能包含共同时间趋势。" data-en="Small monthly sample; quarterly negative-equity publication; approvals/applications are not cohort outcomes; trending series can create spurious correlation.">月度样本较小；负资产仅按季度公布；批核/申请并非同一申请人的队列通过率；趋势变量相关可能包含共同时间趋势。</p>
+        </article>
+      </div>
+      <pre class="command-block"><code>python -m pip install -r requirements.txt
+python scripts/download_data.py
+python scripts/build_dataset.py
+python scripts/build_dashboard_data.py</code></pre>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>DATA THROUGH DEC 2025 · INTERACTIVE ANALYSIS</p>
+    <p data-zh="仅用于教学与作品展示，不构成投资、信贷或审贷建议。" data-en="For education and portfolio demonstration only; not investment, credit or underwriting advice.">仅用于教学与作品展示，不构成投资、信贷或审贷建议。</p>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
